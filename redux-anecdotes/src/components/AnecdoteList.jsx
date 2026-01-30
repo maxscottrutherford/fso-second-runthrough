@@ -7,7 +7,7 @@ const Anecdote = ({ anecdote, handleVote }) => {
       <div>{anecdote.content}</div>
       <div>
         has {anecdote.votes}
-        <button onClick={() => vote(anecdote.id)}>vote</button>
+        <button onClick={handleVote}>vote</button>
       </div>
     </div>
   );
@@ -15,8 +15,16 @@ const Anecdote = ({ anecdote, handleVote }) => {
 
 const Anecdotes = () => {
   const dispatch = useDispatch();
-  const anecdotes = useSelector((state) => state);
+  const anecdotes = useSelector(({ filter, anecdotes }) => {
+    if ( filter === '' ) {
+      return anecdotes
+    }
+    return anecdotes.filter(anecdote =>
+      anecdote.content.toLowerCase().includes(filter.toLowerCase())
+    )
+  })
   const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes);
+
 
   return (
     <>
@@ -25,7 +33,7 @@ const Anecdotes = () => {
         <Anecdote 
           key={anecdote.id}
           anecdote={anecdote}
-          handleVote={() => dispatch(voteAnec(id))}
+          handleVote={() => dispatch(voteAnec(anecdote.id))}
           />
       ))}
     </>
