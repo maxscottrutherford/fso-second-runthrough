@@ -25,6 +25,7 @@ const Anecdotes = () => {
     )
   })
   const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes);
+  
   const handleVote = anecdote => {
     dispatch(voteAnecdote(anecdote.id))
     dispatch(setNotification(`You voted ${anecdote.content}'`))
